@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Profile | <%= user.name%></title>
+  </head>
+  <body>
+    <div class="w-full min-h-screen bg-zinc-900 text-white tracking-wide p-10">
+      <div class="flex justify-between items-center w-10/12 mx-auto">
+        <h2 class="text-3xl font-semibold tracking-tight">
+          Hello, <%= user.name%> ✌️
+        </h2>
+        <a href="/logout" class="bg-red-500 px-5 py-2 rounded-md">Logout</a>
+      </div>
+      <div class="mt-10 px-10">
+        <p class="text-lg mb-5">You can create a new Post...</p>
+        <form
+          action="/post"
+          method="post"
+          class="flex flex-col items-start gap-3"
+        >
+          <textarea
+            name="content"
+            placeholder="what's on your mind ? "
+            required
+            class="w-2/3 h-40 p-3 outline-none resize-none bg-transparent border-2 border-zinc-800 rounded-md"
+          ></textarea>
+          <input
+            type="submit"
+            value="Create Post"
+            class="px-5 cursor-pointer py-2 bg-blue-500 rounded-full"
+          />
+        </form>
+      </div>
+      <div class="mt-10 w-full">
+        <h3 class="text-zinc-400 text-lg">Your Posts.</h3>
+        <div
+          class="post-container mt-4 flex gap-4 flex-wrap w-11/12 mx-auto justify-between"
+        >
+          <% user.posts.reverse().forEach(function(post){%>
+          <div
+            class="post w-[650px] mb-2 p-4 border-[1px] border-zinc-700 bg-zinc-800 rounded-sm"
+          >
+            <h4 class="text-blue-500 mb-4">@<%= user.username%></h4>
+            <p class="text-sm tracking-wide"><%= post.content%></p>
+            <small class="inline-block mt-2"
+              ><%= post.likes.length%> Likes</small
+            >
+            <div class="flex items-center gap-5 mt-1">
+              <a href="/like/<%= post._id%>" class="text-blue-500">
+                <%= post.likes.indexOf(user._id) === -1 ? "🤍" : "❤️"%>
+              </a>
+              <a href="/edit/<%= post._id%>" class="text-zinc-500">Edit</a>
+              <a href="/delete/<%= post._id%>" class="text-red-500">Delete</a>
+              <p class="text-sm text-zinc-400 font-semibold">
+                <%= post.date.toLocaleDateString('en-US')%>
+              </p>
+            </div>
+          </div>
+          <%})%>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
